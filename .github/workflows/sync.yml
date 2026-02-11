@@ -1,0 +1,21 @@
+name: Hytale Sync Service
+on:
+  schedule:
+    - cron: '*/10 * * * *' # سيعمل تلقائياً كل 10 دقائق
+  workflow_dispatch: # يسمح لك بتشغيله يدوياً للتجربة
+
+jobs:
+  update-status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install Dependencies
+        run: npm install firebase-admin axios
+      - name: Execute Sync
+        run: node update_servers.js
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
